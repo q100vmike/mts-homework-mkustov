@@ -1,10 +1,19 @@
 package mtshomework;
 
 public class Shark extends Predator {
-    @Override
-    public void getName() {
-        super.getName();
-        System.out.println("Shark");
+    public Shark() {
+        name = "Shark";
     }
+
+    @Override
+    public String toString() {
+        return "Shark{" +
+                "breed='" + breed + '\'' +
+                ", name='" + name + '\'' +
+                ", cost=" + cost +
+                ", character='" + character + '\'' +
+                '}';
+    }
+
 }
 

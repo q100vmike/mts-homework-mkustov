@@ -10,6 +10,5 @@ public class Main {
 
         CreateAnimalService createAnimalServiceI = new CreateAnimalService(){};
         createAnimalServiceI.createAnimal();
-
     }
 }

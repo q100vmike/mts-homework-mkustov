@@ -1,12 +1,15 @@
 package mtshomework;
 
+import java.util.Random;
+
 public class CreateAnimalServiceImpl implements CreateAnimalService{
     public void createAnimal(int n) {
-        System.out.println("createAnimal(int n)");
+        System.out.println("====createAnimal(int n)====");
+        Random  r = new Random();
         Animal[] animal = new Animal[n];
 
         for (int i = 0; i < n; i++) {
-            int animalType = (int)Math.round(Math.random() * 4);
+            int animalType = r.nextInt(3);//(int)Math.round(Math.random() * 4);
             switch (animalType) {
                 case 0:
                     animal[i] = new Cat();
@@ -20,15 +23,17 @@ public class CreateAnimalServiceImpl implements CreateAnimalService{
                 default:
                     animal[i] = new Wolf();
             }
+            System.out.println(animal[i]);
         }
     }
     @Override
     public void createAnimal() {
-        System.out.println("createAnimal Override");
+        System.out.println("====createAnimal Override====");
         Animal[] animal = new Animal[10];
+        Random  r = new Random();
         int i = 0;
         do {
-            int animalType = (int)Math.round(Math.random() * 4);
+            int animalType = r.nextInt(3);//(int)Math.round(Math.random() * 4);
             switch (animalType) {
                 case 0:
                     animal[i] = new Cat();
@@ -42,6 +47,7 @@ public class CreateAnimalServiceImpl implements CreateAnimalService{
                 default:
                     animal[i] = new Wolf();
             }
+            System.out.println(animal[i]);
             i++;
         } while (i < animal.length);
     }

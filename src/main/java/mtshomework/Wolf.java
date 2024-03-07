@@ -1,9 +1,18 @@
 package mtshomework;
 
 public class Wolf extends Predator {
-    @Override
-    public void getName() {
-        super.getName();
-        System.out.println("Wolf");
+    public Wolf() {
+        name = "Wolf";
     }
+
+    @Override
+    public String toString() {
+        return "Wolf{" +
+                "breed='" + breed + '\'' +
+                ", name='" + name + '\'' +
+                ", cost=" + cost +
+                ", character='" + character + '\'' +
+                '}';
+    }
+
 }

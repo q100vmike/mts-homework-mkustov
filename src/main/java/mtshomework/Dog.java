@@ -1,9 +1,18 @@
 package mtshomework;
 
 public class Dog extends Pet {
-    @Override
-    public void getName() {
-        super.getName();
-        System.out.println("Dog");
+    public Dog() {
+        name = "Dog";
     }
+
+    @Override
+    public String toString() {
+        return "Dog{" +
+                "breed='" + breed + '\'' +
+                ", name='" + name + '\'' +
+                ", cost=" + cost +
+                ", character='" + character + '\'' +
+                '}';
+    }
+
 }

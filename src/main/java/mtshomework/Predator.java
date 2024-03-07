@@ -1,24 +1,23 @@
 package mtshomework;
 
 public class Predator extends AbstractAnimal{
-    @Override
-    public void getBreed() {
-
+    public String getBreed() {
+        return breed;
     }
 
     @Override
-    public void getName() {
-
+    public String getName() {
+        return name;
     }
 
     @Override
-    public void getCost() {
-
+    public Double getCost() {
+        return cost;
     }
 
     @Override
-    public void getCharacter() {
-
+    public String getCharacter() {
+        return character;
     }
 }
 

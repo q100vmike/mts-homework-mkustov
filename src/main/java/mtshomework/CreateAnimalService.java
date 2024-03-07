@@ -2,7 +2,7 @@ package mtshomework;
 
 public interface CreateAnimalService {
     default void createAnimal(){
-        System.out.println("interface CreateAnimalService");
+        System.out.println("====interface CreateAnimalService====");
         Animal[] animal = new Animal[10];
         int i = 0;
         while (i < animal.length) {
@@ -20,6 +20,8 @@ public interface CreateAnimalService {
                 default:
                     animal[i] = new Wolf();
             }
+            System.out.println(animal[i]);
+            i++;
         }
     }
 }
