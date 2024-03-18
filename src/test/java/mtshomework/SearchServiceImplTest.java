@@ -46,7 +46,7 @@ class SearchServiceImplTest {
     public void whenCreateSharkNullException() throws InvalidAnimalException, InvalidAnimalBirtDateException {
         Predator shark = null;
         SearchServiceImpl searchService = new SearchServiceImpl();
-        Exception exception = assertThrows(InvalidAnimalException.class, () -> searchService.checkLeapYearAnimal(shark));
+        InvalidAnimalException exception = assertThrows(InvalidAnimalException.class, () -> searchService.checkLeapYearAnimal(shark));
         String expectedMessage = "На вход пришел некорректное животное " + LocalDate.now();
         String actualMessage = exception.getMessage();
         assertTrue(actualMessage.equals(expectedMessage));
