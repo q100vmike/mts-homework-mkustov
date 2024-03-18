@@ -14,14 +14,15 @@ public class SearchServiceImpl implements SearchService {
                 year > 1584 &&
                         (
                                 (year % 400 == 0) ||
-                                        (year %4 == 0 && year % 100 != 0)
+                                        (year % 4 == 0 && year % 100 != 0)
                         )
         );
-        if (leapyear)
+        if (leapyear) {
             System.out.println(animal.getName() + " был рожден в високосный год "
                     + Integer.toString(year));
-        else
+        } else {
             System.out.println(animal.getName() + " был рожден в НЕ високосный год "
                     + Integer.toString(year));
+        }
     }
 }

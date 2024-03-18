@@ -1,6 +1,8 @@
 package mtshomework;
 
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
 
 public abstract class AbstractAnimal implements Animal {
     protected String breed;
@@ -32,11 +34,8 @@ public abstract class AbstractAnimal implements Animal {
     @Override
     public LocalDate getBirthDate() throws InvalidAnimalBirtDateException {
         if (birthDate == null) {
-            throw new InvalidAnimalBirtDateException("у животного "
-                    + getBreed()
-                    + " "
-                    + getName()
-                    + " не указана дата его рождения");
+            String [] message = {getBreed(), getName()};
+            throw new InvalidAnimalBirtDateException(message);
         }
         return birthDate;
     }
