@@ -6,6 +6,7 @@ public class Wolf extends Predator {
     }
     public Wolf(String name) {
         this.name = name;
+        this.breed = "Wolf";
     }
     @Override
     public String toString() {

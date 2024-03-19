@@ -1,54 +1,67 @@
 package mtshomework;
 
-import java.util.Random;
+import java.util.*;
 
 public class CreateAnimalServiceImpl implements CreateAnimalService{
-    public void createAnimal(int n) {
-        System.out.println("====createAnimal(int n)====");
+    public Map<String, List<Animal>> createAnimal(int n) {
+        Map<String, List<Animal>> animalsMap = new HashMap<>();
         Random  r = new Random();
-        Animal[] animal = new Animal[n];
+        List<Animal> animal = new ArrayList<>(n);
 
         for (int i = 0; i < n; i++) {
-            int animalType = r.nextInt(3);//(int)Math.round(Math.random() * 4);
+            int animalType = r.nextInt(3);
             switch (animalType) {
                 case 0:
-                    animal[i] = new Cat();
+                    animal.add(new Cat());
                     break;
                 case 1:
-                    animal[i] = new Dog();
+                    animal.add(new Dog());
                     break;
                 case 2:
-                    animal[i] = new Shark();
+                    animal.add(new Shark());
                     break;
                 default:
-                    animal[i] = new Wolf();
+                    animal.add(new Wolf());
             }
-            System.out.println(animal[i]);
+            String animalName = animal.get(i).getName();
+            if (!animalsMap.containsKey(animalName)) {
+                animalsMap.put(animalName, new ArrayList<>());
+            }
+            animalsMap.get(animalName).add(animal.get(i));
+            System.out.println(animal.get(i));
         }
+        return animalsMap;
     }
     @Override
-    public void createAnimal() {
-        System.out.println("====createAnimal Override====");
-        Animal[] animal = new Animal[10];
+    public Map<String, List<Animal>> createAnimal() {
+        Map<String, List<Animal>> animalsMap = new HashMap<>();
+        List<Animal> animal = new ArrayList<>(10);
         Random  r = new Random();
         int i = 0;
         do {
-            int animalType = r.nextInt(3);//(int)Math.round(Math.random() * 4);
+            int animalType = r.nextInt(3);
             switch (animalType) {
                 case 0:
-                    animal[i] = new Cat();
+                    animal.add(new Cat());
                     break;
                 case 1:
-                    animal[i] = new Dog();
+                    animal.add(new Dog());
                     break;
                 case 2:
-                    animal[i] = new Shark();
+                    animal.add(new Shark());
                     break;
                 default:
-                    animal[i] = new Wolf();
+                    animal.add(new Wolf());
             }
-            System.out.println(animal[i]);
+            String animalName = animal.get(i).getName();
+            if (!animalsMap.containsKey(animalName)) {
+                animalsMap.put(animalName, new ArrayList<>());
+            }
+            animalsMap.get(animalName).add(animal.get(i));
+            System.out.println(animal.get(i));
             i++;
-        } while (i < animal.length);
+        } while (i < animal.size());
+
+        return animalsMap;
     }
 }

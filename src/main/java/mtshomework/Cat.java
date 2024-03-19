@@ -6,6 +6,7 @@ public class Cat extends Pet {
     }
     public Cat(String name) {
         this.name = name;
+        this.breed = "Cat";
     }
     @Override
     public String toString() {
