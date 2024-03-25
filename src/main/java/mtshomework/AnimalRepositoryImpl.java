@@ -62,4 +62,40 @@ public class AnimalRepositoryImpl implements AnimalRepository{
                 .collect(Collectors.groupingBy(Animal::getBreed, Collectors.toList()));
     }
 
+    @Override
+    public void findAverageAge(List<AbstractAnimal> animals) {
+        Double old = animals.stream()
+                .mapToInt(a -> Math.toIntExact(YEARS.between(a.birthDate, LocalDate.now())))
+                .average()
+                .orElse(0);
+        System.out.println("Средний возраст животных: " + Double.toString(old)+ " лет");
+    }
+
+    @Override
+    public List<Animal> findOldAndExpensive(List<AbstractAnimal> animals) {
+        Double avg = animals.stream()
+                .mapToDouble(a -> a.cost)
+                .average()
+                .orElse(0);
+
+        List<Animal> list = animals.stream()
+                .filter(a -> Math.toIntExact(YEARS.between(a.birthDate, LocalDate.now())) > 5)
+                .filter(a -> a.cost > avg)
+                .sorted(Comparator.comparing(a -> a.birthDate))
+                .collect(Collectors.toList());
+
+        return list;
+    }
+
+    @Override
+    public List<String> findMinConstAnimals(List<AbstractAnimal> animals) {
+        return animals.stream()
+                .sorted((a, b) -> a.cost.compareTo(b.cost))
+                .limit(3)
+                .map(a -> a.name)
+                .sorted()
+                .collect(Collectors.toList());
+    }
+
+
 }
