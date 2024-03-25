@@ -6,14 +6,15 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class AnimalRepositoryImplTest {
 
@@ -180,7 +181,7 @@ class AnimalRepositoryImplTest {
     }
 
     @Test
-    @DisplayName("Тест findOlderAnimal: если у животного Shark Akula нет даты рождения")
+    @DisplayName("Тест findDuplicateStreem: Ищем дубликаты используя streem")
     void whenAnimalsGroupByStreem() throws InvalidAnimalBirtDateException {
         Map<String, List<Animal>> result = new HashMap<>();
         AbstractAnimal animal1 = new Cat("Kitty");
@@ -238,6 +239,106 @@ class AnimalRepositoryImplTest {
 
         AnimalRepository animalRepository = new AnimalRepositoryImpl();
         Map<String, List<Animal>> expect = animalRepository.findDuplicateStreem(list);
+        assertTrue(expect.equals(result));
+    }
+
+    @Test
+    @DisplayName("Тест findAverageAge. Средний возраст животных")
+    public void whenAnimalsAgeIs17() {
+        PrintStream save_out=System.out;
+        final ByteArrayOutputStream out = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(out));
+        Map<Animal, Integer> expect = new HashMap<>();
+        AbstractAnimal animal1 = new Cat("Kitty");
+        animal1.birthDate = LocalDate.parse("2015-03-12");
+        AbstractAnimal animal2 = new Cat("Tom");
+        animal2.birthDate = LocalDate.parse("2023-03-12");
+        AbstractAnimal animal3 = new Shark("Akula");
+        animal3.birthDate = LocalDate.parse("1995-03-12");
+        AbstractAnimal animal4 = new Wolf("Volk");
+        animal4.birthDate = LocalDate.parse("2000-03-12");
+        AbstractAnimal animal5 = new Dog("Polkan");
+        animal5.birthDate = LocalDate.parse("2002-03-12");
+        List<AbstractAnimal> list = new ArrayList<>() {
+            {
+                add(animal1);
+                add(animal2);
+                add(animal3);
+                add(animal4);
+                add(animal5);
+            }
+        };
+
+        AnimalRepository animalRepository = new AnimalRepositoryImpl();
+        animalRepository.findAverageAge(list);
+
+        String expected = "Средний возраст животных: 17.0 лет\r\n";
+        assertEquals(expected, out.toString());
+    }
+
+    @Test
+    @DisplayName("Тест findMinConstAnimals: 3 животных с мин стоимостью отсортированные по алфавиту")
+    void when3AnimalsMinCostSort() throws InvalidAnimalBirtDateException {
+        AbstractAnimal animal1 = new Cat("Жорик");
+        animal1.birthDate = LocalDate.parse("2024-03-12");
+        animal1.cost = 100D;
+        AbstractAnimal animal2 = new Cat("Тузик");
+        animal2.birthDate = LocalDate.parse("2020-03-12");
+        animal2.cost = 1500D;
+        AbstractAnimal animal3 = new Dog("Борька");
+        animal3.birthDate = LocalDate.parse("1991-03-12");
+        animal3.cost = 1000D;
+        AbstractAnimal animal4 = new Dog("Снежок");
+        animal4.birthDate = LocalDate.parse("1996-03-12");
+        animal4.cost = 500D;
+        AbstractAnimal animal5 = new Cat("Алик");
+        animal5.birthDate = LocalDate.parse("2002-03-12");
+        animal5.cost = 100D;
+        AbstractAnimal animal6 = new Shark("Юла");
+        animal6.birthDate = LocalDate.parse("2002-03-12");
+        animal6.cost = 400D;
+
+        List<AbstractAnimal> list = List.of(animal1, animal2, animal3, animal4, animal5, animal6);
+
+        AnimalRepository animalRepository = new AnimalRepositoryImpl();
+        List<String> expect = animalRepository.findMinConstAnimals(list);
+
+        List<String> result = List.of("Алик", "Жорик", "Юла");
+
+        assertTrue(expect.equals(result));
+    }
+
+    @Test
+    @DisplayName("Тест findOldAndExpensive: Животные возраст которых больше 5 лет" +
+            "стоимость которых больше средней стоимости всех животных. Результатом работы" +
+            "метода должен быть отсортированный по дате рождения")
+    void whenOlder5AndExpensive() throws InvalidAnimalBirtDateException {
+        AbstractAnimal animal1 = new Cat("Жорик");
+        animal1.birthDate = LocalDate.parse("2024-03-12");
+        animal1.cost = 100D;
+        AbstractAnimal animal2 = new Cat("Тузик");
+        animal2.birthDate = LocalDate.parse("1996-03-12");
+        animal2.cost = 1500D;
+        AbstractAnimal animal3 = new Dog("Борька");
+        animal3.birthDate = LocalDate.parse("1990-03-12");
+        animal3.cost = 1000D;
+        AbstractAnimal animal4 = new Dog("Снежок");
+        animal4.birthDate = LocalDate.parse("1996-03-12");
+        animal4.cost = 500D;
+        AbstractAnimal animal5 = new Cat("Алик");
+        animal5.birthDate = LocalDate.parse("2002-03-12");
+        animal5.cost = 100D;
+        AbstractAnimal animal6 = new Shark("Юла");
+        animal6.birthDate = LocalDate.parse("2002-03-12");
+        animal6.cost = 400D;
+
+        List<AbstractAnimal> list = List.of(animal1, animal2, animal3, animal4, animal5, animal6);
+
+        AnimalRepository animalRepository = new AnimalRepositoryImpl();
+        List<Animal> expect = animalRepository.findOldAndExpensive(list);
+
+        List<Animal> result = List.of(animal3,animal2);
+
         assertTrue(expect.equals(result));
     }
 }
