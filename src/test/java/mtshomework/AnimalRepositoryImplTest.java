@@ -178,4 +178,66 @@ class AnimalRepositoryImplTest {
 
         assertTrue(actualMessage.contains(expectedMessage));
     }
+
+    @Test
+    @DisplayName("Тест findOlderAnimal: если у животного Shark Akula нет даты рождения")
+    void whenAnimalsGroupByStreem() throws InvalidAnimalBirtDateException {
+        Map<String, List<Animal>> result = new HashMap<>();
+        AbstractAnimal animal1 = new Cat("Kitty");
+        animal1.birthDate = LocalDate.parse("2015-03-12");
+        AbstractAnimal animal2 = new Cat("Tom");
+        animal2.birthDate = LocalDate.parse("2023-03-12");
+        AbstractAnimal animal3 = new Shark("Akula");
+        animal3.birthDate = LocalDate.parse("1995-03-12");
+        AbstractAnimal animal4 = new Wolf("Volk");
+        animal4.birthDate = LocalDate.parse("2000-03-12");
+        AbstractAnimal animal5 = new Dog("Polkan");
+        animal5.birthDate = LocalDate.parse("2002-03-12");
+        AbstractAnimal animal6 = new Dog("Sharik");
+        animal5.birthDate = LocalDate.parse("2002-03-12");
+        AbstractAnimal animal7 = new Dog("Bobik");
+        animal5.birthDate = LocalDate.parse("2002-03-12");
+        List<AbstractAnimal> list = new ArrayList<>() {
+            {
+                add(animal1);
+                add(animal2);
+                add(animal3);
+                add(animal4);
+                add(animal5);
+                add(animal6);
+                add(animal7);
+            }
+        };
+        List<Animal> listCat = new ArrayList<>() {
+            {
+                add(animal1);
+                add(animal2);
+            }
+        };
+        List<Animal> listShark = new ArrayList<>() {
+            {
+                add(animal3);
+            }
+        };
+        List<Animal> listWolf = new ArrayList<>() {
+            {
+                add(animal4);
+            }
+        };
+        List<Animal> listDog = new ArrayList<>() {
+            {
+                add(animal5);
+                add(animal6);
+                add(animal7);
+            }
+        };
+        result.put("Cat", listCat);
+        result.put("Shark", listShark);
+        result.put("Wolf", listWolf);
+        result.put("Dog", listDog);
+
+        AnimalRepository animalRepository = new AnimalRepositoryImpl();
+        Map<String, List<Animal>> expect = animalRepository.findDuplicateStreem(list);
+        assertTrue(expect.equals(result));
+    }
 }

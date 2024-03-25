@@ -2,6 +2,7 @@ package mtshomework;
 
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static java.time.temporal.ChronoUnit.YEARS;
 
@@ -47,7 +48,7 @@ public class AnimalRepositoryImpl implements AnimalRepository{
         return map;
     }
 
-    @Override
+   @Override
     public Map<String, Integer> findDuplicate(List<AbstractAnimal> animals) {
         Map<String, Integer> map = new HashMap<>();
         for (AbstractAnimal animal : animals) {
@@ -55,4 +56,10 @@ public class AnimalRepositoryImpl implements AnimalRepository{
         }
         return map;
     }
+    @Override
+    public Map<String, List<Animal>> findDuplicateStreem(List<AbstractAnimal> animals) {
+        return animals.stream()
+                .collect(Collectors.groupingBy(Animal::getBreed, Collectors.toList()));
+    }
+
 }
