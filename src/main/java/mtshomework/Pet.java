@@ -1,5 +1,5 @@
 package mtshomework;
 
-public class Pet extends AbstractAnimal{
+public abstract class Pet extends AbstractAnimal {
 }
 

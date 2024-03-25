@@ -1,27 +1,38 @@
 package mtshomework;
 
+import java.util.*;
+
 public interface CreateAnimalService {
-    default void createAnimal(){
-        System.out.println("====interface CreateAnimalService====");
-        Animal[] animal = new Animal[10];
+    default Map<String, List<Animal>> createAnimal(){
+        Map<String, List<Animal>> animalsMap = new HashMap<>();
+        List<Animal> list = new ArrayList<>();
+        List<Animal> animal = new ArrayList<>(10);
         int i = 0;
-        while (i < animal.length) {
+
+        while (i < animal.size()) {
             int animalType = (int)Math.round(Math.random() * 4);
             switch (animalType) {
                 case 0:
-                    animal[i] = new Cat();
+                    animal.add(new Cat());
                     break;
                 case 1:
-                    animal[i] = new Dog();
+                    animal.add(new Dog());
                     break;
                 case 2:
-                    animal[i] = new Shark();
+                    animal.add(new Shark());
                     break;
                 default:
-                    animal[i] = new Wolf();
+                    animal.add(new Wolf());
             }
-            System.out.println(animal[i]);
+            String animalName = animal.get(i).getName();
+            if (!animalsMap.containsKey(animalName)) {
+                animalsMap.put(animalName, new ArrayList<>());
+            }
+            animalsMap.get(animalName).add(animal.get(i));
+
+            System.out.println(animal.get(i));
             i++;
         }
+        return animalsMap;
     }
 }
