@@ -2,28 +2,29 @@ package mtshomework;
 
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static java.time.temporal.ChronoUnit.YEARS;
 
 public class AnimalRepositoryImpl implements AnimalRepository{
     @Override
     public Map<String, LocalDate> findLeapYearNames(List<AbstractAnimal> animals) throws InvalidAnimalBirtDateException {
-        Map<String, LocalDate> map = new HashMap<>();
         SearchServiceImpl searchService = new SearchServiceImpl();
 
-        for (AbstractAnimal animal : animals){
-            if (searchService.checkLeapYearAnimal(animal)) {
-                map.put(animal.getBreed() + " " + animal.getName(), animal.birthDate);
+        return animals.stream().filter(a -> {
+            try {
+                return searchService.checkLeapYearAnimal(a);
+            } catch (InvalidAnimalBirtDateException e) {
+                throw new RuntimeException(e);
             }
-        }
-        return map;
+        }).collect(Collectors.toMap(a -> a.getBreed() + " " + a.getName(), b -> b.birthDate));
     }
 
     @Override
     public Map<Animal, Integer> findOlderAnimal(List<AbstractAnimal> animals, Integer N) {
         Integer yearsOld = 0;
         Map<Animal, Integer> map = new HashMap<>();
-        Collections.sort(animals, new Comparator<AbstractAnimal>(){
+/*        Collections.sort(animals, new Comparator<AbstractAnimal>(){
             public int compare(AbstractAnimal o1, AbstractAnimal o2)
             {
                 try {
@@ -32,14 +33,18 @@ public class AnimalRepositoryImpl implements AnimalRepository{
                     throw new RuntimeException(e);
                 }
             }
-        });
-
+        });*/
+        map = animals.stream().sorted(Comparator.comparing(a -> a.birthDate))
+                .filter(a -> N < Math.toIntExact(YEARS.between(a.birthDate, LocalDate.now())))
+                .collect(Collectors.toMap(a -> a, b -> Math.toIntExact(YEARS.between(b.birthDate, LocalDate.now()))));
+/*
         for (int i = 0; i < animals.size(); i++)  {
             yearsOld = Math.toIntExact(YEARS.between(animals.get(i).birthDate, LocalDate.now()));
             if (N < yearsOld) {
                 map.put(animals.get(i), yearsOld);
             }
         }
+        */
         if (map.isEmpty() && !animals.isEmpty()) {
             Integer firstYearsOld = Math.toIntExact(YEARS.between(animals.get(0).birthDate, LocalDate.now()));
             map.put(animals.get(0), firstYearsOld);
