@@ -8,39 +8,34 @@ import static java.time.temporal.ChronoUnit.YEARS;
 
 public class AnimalRepositoryImpl implements AnimalRepository{
     @Override
-    public Map<String, LocalDate> findLeapYearNames(List<AbstractAnimal> animals) throws InvalidAnimalBirtDateException {
-        Map<String, LocalDate> map = new HashMap<>();
+    public Map<String, LocalDate> findLeapYearNames(List<AbstractAnimal> animals) {
         SearchServiceImpl searchService = new SearchServiceImpl();
 
-        for (AbstractAnimal animal : animals){
-            if (searchService.checkLeapYearAnimal(animal)) {
-                map.put(animal.getBreed() + " " + animal.getName(), animal.birthDate);
+        return animals.stream().filter(a -> {
+            try {
+                return searchService.checkLeapYearAnimal(a);
+            } catch (InvalidAnimalBirtDateException e) {
+                throw new RuntimeException(e);
             }
-        }
-        return map;
+        }).collect(Collectors.toMap(a -> a.getBreed() + " " + a.getName(), b -> b.birthDate));
     }
 
     @Override
     public Map<Animal, Integer> findOlderAnimal(List<AbstractAnimal> animals, Integer N) {
-        Integer yearsOld = 0;
-        Map<Animal, Integer> map = new HashMap<>();
-        Collections.sort(animals, new Comparator<AbstractAnimal>(){
-            public int compare(AbstractAnimal o1, AbstractAnimal o2)
-            {
-                try {
-                    return o1.getBirthDate().compareTo(o2.getBirthDate());
-                } catch (InvalidAnimalBirtDateException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        });
+        Map<Animal, Integer> map;
+        animals = animals.stream()
+                .sorted(Comparator.comparing(a -> {
+                    try {
+                        return a.getBirthDate();
+                    } catch (InvalidAnimalBirtDateException e) {
+                        throw new RuntimeException(e);
+                    }
+                }))
+                .collect(Collectors.toList());
+        map = animals.stream()
+                .filter(a -> N < Math.toIntExact(YEARS.between(a.birthDate, LocalDate.now())))
+                .collect(Collectors.toMap(a -> a, b -> Math.toIntExact(YEARS.between(b.birthDate, LocalDate.now())))) ;
 
-        for (int i = 0; i < animals.size(); i++)  {
-            yearsOld = Math.toIntExact(YEARS.between(animals.get(i).birthDate, LocalDate.now()));
-            if (N < yearsOld) {
-                map.put(animals.get(i), yearsOld);
-            }
-        }
         if (map.isEmpty() && !animals.isEmpty()) {
             Integer firstYearsOld = Math.toIntExact(YEARS.between(animals.get(0).birthDate, LocalDate.now()));
             map.put(animals.get(0), firstYearsOld);
@@ -93,9 +88,7 @@ public class AnimalRepositoryImpl implements AnimalRepository{
                 .sorted((a, b) -> a.cost.compareTo(b.cost))
                 .limit(3)
                 .map(a -> a.name)
-                .sorted()
+                .sorted(Comparator.reverseOrder())
                 .collect(Collectors.toList());
     }
-
-
 }

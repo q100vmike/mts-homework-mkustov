@@ -277,7 +277,7 @@ class AnimalRepositoryImplTest {
     }
 
     @Test
-    @DisplayName("Тест findMinConstAnimals: 3 животных с мин стоимостью отсортированные по алфавиту")
+    @DisplayName("Тест findMinConstAnimals: 3 животных с мин стоимостью отсортированные по алфавиту в обратном порядке")
     void when3AnimalsMinCostSort() throws InvalidAnimalBirtDateException {
         AbstractAnimal animal1 = new Cat("Жорик");
         animal1.birthDate = LocalDate.parse("2024-03-12");
@@ -303,7 +303,7 @@ class AnimalRepositoryImplTest {
         AnimalRepository animalRepository = new AnimalRepositoryImpl();
         List<String> expect = animalRepository.findMinConstAnimals(list);
 
-        List<String> result = List.of("Алик", "Жорик", "Юла");
+        List<String> result = List.of("Юла", "Жорик", "Алик");
 
         assertTrue(expect.equals(result));
     }
